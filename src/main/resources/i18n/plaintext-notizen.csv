@@ -1,0 +1,60 @@
+defaultLabel;languageCode;translatedText
+# plaintext-modul-notizen (Karte 2096): Schluessel = deutscher Text wie in i18n.t('...'). Kein Semikolon in Texten.
+# «Speichern» und «Liste» uebersetzt root (plaintext-root.csv), sie stehen deshalb nicht hier.
+Notizen;en;Notes
+Notizen;fr;Notes
+Notizen;it;Note
+Meine Notizen;en;My notes
+Meine Notizen;fr;Mes notes
+Meine Notizen;it;Le mie note
+Notizen-Einstellungen;en;Notes settings
+Notizen-Einstellungen;fr;Paramètres des notes
+Notizen-Einstellungen;it;Impostazioni delle note
+Speichert …;en;Saving …
+Speichert …;fr;Enregistrement …
+Speichert …;it;Salvataggio …
+Gespeichert;en;Saved
+Gespeichert;fr;Enregistré
+Gespeichert;it;Salvato
+Für Notizen ist noch keine Speicher-Ablage eingerichtet.;en;No file store has been set up for notes yet.
+Für Notizen ist noch keine Speicher-Ablage eingerichtet.;fr;Aucun espace de stockage n'est encore configuré pour les notes.
+Für Notizen ist noch keine Speicher-Ablage eingerichtet.;it;Non è ancora configurato alcun archivio per le note.
+Formatieren;en;Format
+Formatieren;fr;Mise en forme
+Formatieren;it;Formattazione
+Fett;en;Bold
+Fett;fr;Gras
+Fett;it;Grassetto
+Kursiv;en;Italic
+Kursiv;fr;Italique
+Kursiv;it;Corsivo
+Überschrift;en;Heading
+Überschrift;fr;Titre
+Überschrift;it;Titolo
+In eigenem Fenster öffnen;en;Open in its own window
+In eigenem Fenster öffnen;fr;Ouvrir dans une fenêtre séparée
+In eigenem Fenster öffnen;it;Apri in una finestra separata
+Die Notizen liegen in einer Speicher-Ablage von plaintext-root. Ablagen richtet ROOT unter Root – Sidecars ein (Nextcloud, Git oder Lokale Datei).;en;Notes are kept in a plaintext-root file store. ROOT sets up file stores under Root – Sidecars (Nextcloud, Git or local file).
+Die Notizen liegen in einer Speicher-Ablage von plaintext-root. Ablagen richtet ROOT unter Root – Sidecars ein (Nextcloud, Git oder Lokale Datei).;fr;Les notes sont conservées dans un espace de stockage de plaintext-root. ROOT configure les espaces sous Root – Sidecars (Nextcloud, Git ou fichier local).
+Die Notizen liegen in einer Speicher-Ablage von plaintext-root. Ablagen richtet ROOT unter Root – Sidecars ein (Nextcloud, Git oder Lokale Datei).;it;Le note sono conservate in un archivio di plaintext-root. ROOT configura gli archivi in Root – Sidecars (Nextcloud, Git o file locale).
+Es ist noch keine Speicher-Ablage eingerichtet.;en;No file store has been set up yet.
+Es ist noch keine Speicher-Ablage eingerichtet.;fr;Aucun espace de stockage n'est encore configuré.
+Es ist noch keine Speicher-Ablage eingerichtet.;it;Non è ancora configurato alcun archivio.
+Speicher-Ablage;en;File store
+Speicher-Ablage;fr;Espace de stockage
+Speicher-Ablage;it;Archivio
+Ordner in der Ablage;en;Folder in the store
+Ordner in der Ablage;fr;Dossier dans l'espace
+Ordner in der Ablage;it;Cartella nell'archivio
+Prüfen;en;Check
+Prüfen;fr;Vérifier
+Prüfen;it;Verifica
+Prüfung erfolgreich, die Ablage ist les- und schreibbar:;en;Check passed, the store can be read and written:
+Prüfung erfolgreich, die Ablage ist les- und schreibbar:;fr;Vérification réussie, l'espace est accessible en lecture et en écriture :
+Prüfung erfolgreich, die Ablage ist les- und schreibbar:;it;Verifica riuscita, l'archivio è leggibile e scrivibile:
+Gespeichert:;en;Saved:
+Gespeichert:;fr;Enregistré :
+Gespeichert:;it;Salvato:
+Fehler:;en;Error:
+Fehler:;fr;Erreur :
+Fehler:;it;Errore:

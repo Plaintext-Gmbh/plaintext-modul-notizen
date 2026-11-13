@@ -1,0 +1,59 @@
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="#{param.fenster eq '1' ? '/notizen/fenster.xhtml' : '/includes/template.xhtml'}">
+    <!-- Karte 2096: «Meine Notizen». Mit ?fenster=1 dieselbe Seite ohne Menue (Popup); so bleibt sie
+         ueber den Menueeintrag geschuetzt (PageAccessGuard), ohne Alias. Verhalten in notizen/notizen.js
+         (kein on…-Attribut: CSP ohne 'unsafe-inline'). -->
+
+    <f:metadata>
+        <f:viewAction action="#{notizenBean.laden}"/>
+    </f:metadata>
+
+    <ui:define name="title">#{i18n.t('Meine Notizen')}</ui:define>
+
+    <ui:define name="content">
+        <h:outputStylesheet library="notizen" name="notizen.css"/>
+        <h:form id="nf">
+            <input type="hidden" name="_csrf" value="#{_csrf.token}"/>
+            <div class="notizen #{param.fenster eq '1' ? 'notizen-im-fenster' : ''}"
+                 data-text-speichert="#{i18n.t('Speichert …')}">
+
+                <h:panelGroup layout="block" styleClass="notizen-hinweis" rendered="#{notizenBean.ohneAblage}">
+                    #{i18n.t('Für Notizen ist noch keine Speicher-Ablage eingerichtet.')}
+                    <a href="notizen-einstellungen.html">#{i18n.t('Notizen-Einstellungen')}</a>
+                </h:panelGroup>
+
+                <h:panelGroup layout="block" rendered="#{not notizenBean.ohneAblage}">
+                    <div class="notizen-leiste" role="toolbar" aria-label="#{i18n.t('Formatieren')}">
+                        <button type="button" class="notizen-knopf" data-format="fett" title="#{i18n.t('Fett')}"><b>B</b></button>
+                        <button type="button" class="notizen-knopf" data-format="kursiv" title="#{i18n.t('Kursiv')}"><i>I</i></button>
+                        <button type="button" class="notizen-knopf" data-format="liste" title="#{i18n.t('Liste')}">&#8226;</button>
+                        <button type="button" class="notizen-knopf" data-format="titel" title="#{i18n.t('Überschrift')}">H</button>
+                        <h:panelGroup rendered="#{param.fenster ne '1'}">
+                            <button type="button" class="notizen-knopf notizen-fenster-knopf" data-fenster="1">
+                                <span class="pi pi-external-link"></span> #{i18n.t('In eigenem Fenster öffnen')}
+                            </button>
+                        </h:panelGroup>
+                        <h:panelGroup id="notizStatus" layout="block"
+                                      styleClass="notizen-status #{empty notizenBean.fehler ? '' : 'notizen-fehler'}"
+                                      pt:data-stand="#{notizenBean.stand}">
+                            <h:outputText value="#{i18n.t('Gespeichert')} #{notizenBean.gespeichertUm}"
+                                          rendered="#{empty notizenBean.fehler and not empty notizenBean.gespeichertUm}"/>
+                            <h:outputText value="#{notizenBean.fehler}" rendered="#{not empty notizenBean.fehler}"/>
+                        </h:panelGroup>
+                    </div>
+                    <h:inputTextarea id="notizText" value="#{notizenBean.text}" styleClass="notizen-text"
+                                     pt:aria-label="#{i18n.t('Meine Notizen')}" pt:spellcheck="true"/>
+                    <p:remoteCommand name="notizSpeichern" process="@this notizText" action="#{notizenBean.speichern}"
+                                     update="notizStatus"/>
+                    <p:remoteCommand name="notizNeuLaden" process="@this" action="#{notizenBean.neuLadenWennNoetig}"/>
+                </h:panelGroup>
+            </div>
+        </h:form>
+        <h:outputScript library="notizen" name="notizen.js" target="body"/>
+    </ui:define>
+</ui:composition>

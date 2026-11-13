@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Karte 2096: oeffentliches Plaintext-Modul. Parent = root-v2, alle root-Teile "provided":
+         die Anwendung, in die das Modul kommt, bringt sie mit. -->
+    <parent>
+        <groupId>ch.plaintext.v2</groupId>
+        <artifactId>plaintext-root-parent</artifactId>
+        <version>3.28.0</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>ch.plaintext</groupId>
+    <artifactId>plaintext-modul-notizen</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>plaintext-modul-notizen</name>
+    <description>Textnotizen mit Autosave fuer Plaintext-Anwendungen, gespeichert ueber die Speicher-Ablagen von plaintext-root</description>
+    <url>https://github.com/Plaintext-Gmbh/plaintext-modul-notizen</url>
+
+    <licenses>
+        <license>
+            <name>MPL-2.0</name>
+            <url>https://mozilla.org/MPL/2.0/</url>
+        </license>
+    </licenses>
+
+    <properties>
+        <!-- gleich der Parent-Version, sonst setzt der root-Parent sie auf project.version -->
+        <plaintext-root.version>3.28.0</plaintext-root.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>ch.plaintext.v2</groupId>
+            <artifactId>plaintext-root-webapp</artifactId>
+            <version>${plaintext-root.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <!-- plaintext-root-v2 und dieses Modul liegen im Plaintext-Maven-Repo auf GitHub Packages. -->
+        <repository>
+            <id>plaintext</id>
+            <url>https://maven.pkg.github.com/Plaintext-Gmbh/plaintext-mvn</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>plaintext</id>
+            <url>https://maven.pkg.github.com/Plaintext-Gmbh/plaintext-mvn</url>
+        </repository>
+    </distributionManagement>
+</project>

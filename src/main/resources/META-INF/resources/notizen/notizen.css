@@ -1,0 +1,103 @@
+/* Karte 2096: Notizen. Nur Theme-Variablen, damit Hell und Dunkel stimmen. */
+.notizen-leiste {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.notizen-knopf {
+    min-width: 34px;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid var(--surface-border, #cbd5e1);
+    border-radius: 6px;
+    background: var(--surface-card, #fff);
+    color: var(--text-color, #1f2937);
+    cursor: pointer;
+}
+
+.notizen-knopf:hover {
+    background: var(--surface-hover, #f1f5f9);
+}
+
+.notizen-knopf:focus-visible {
+    outline: 2px solid var(--primary-color, #2563eb);
+    outline-offset: 2px;
+}
+
+.notizen-status {
+    margin-left: auto;
+    font-size: 0.85rem;
+    color: var(--text-color-secondary, #64748b);
+}
+
+.notizen-fehler {
+    color: var(--red-600, #dc2626);
+}
+
+.notizen-text {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 320px;
+    height: calc(100vh - 300px);
+    padding: 12px;
+    border: 1px solid var(--surface-border, #cbd5e1);
+    border-radius: 8px;
+    background: var(--surface-card, #fff);
+    color: var(--text-color, #1f2937);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+/* Popup (notizen.html?fenster=1): der Editor füllt das Fenster. */
+.notizen-fenster-rahmen {
+    margin: 0;
+    padding: 10px;
+    background: var(--surface-ground, #f8fafc);
+    font-family: system-ui, sans-serif;
+}
+
+.notizen-im-fenster .notizen-text {
+    height: calc(100vh - 70px);
+}
+
+.notizen-hinweis {
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: var(--surface-ground, #f8fafc);
+}
+
+.notizen-formular {
+    display: grid;
+    grid-template-columns: max-content minmax(200px, 360px);
+    gap: 10px 14px;
+    align-items: center;
+    margin: 14px 0;
+}
+
+.notizen-knoepfe {
+    display: flex;
+    gap: 8px;
+}
+
+.notizen-meldung {
+    margin-top: 12px;
+}
+
+.notizen-ok {
+    color: var(--green-700, #15803d);
+}
+
+@media (max-width: 600px) {
+    .notizen-formular {
+        grid-template-columns: 1fr;
+    }
+
+    .notizen-text {
+        height: calc(100vh - 240px);
+    }
+}

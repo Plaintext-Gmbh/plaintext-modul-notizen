@@ -48,9 +48,12 @@
                     </div>
                     <h:inputTextarea id="notizText" value="#{notizenBean.text}" styleClass="notizen-text"
                                      pt:aria-label="#{i18n.t('Meine Notizen')}" pt:spellcheck="true"/>
-                    <p:remoteCommand name="notizSpeichern" process="@this notizText" action="#{notizenBean.speichern}"
+                    <!-- Feste ids (Karte 2096, 1.0.1): ohne sie bekommt der Command im Popup (?fenster=1)
+                         eine andere j_idt-Id; der Postback baut den Baum aus der URL ohne fenster=1
+                         und findet die Quelle nie -> Aktion laeuft nicht. -->
+                    <p:remoteCommand id="speichernCmd" name="notizSpeichern" process="@this notizText" action="#{notizenBean.speichern}"
                                      update="notizStatus"/>
-                    <p:remoteCommand name="notizNeuLaden" process="@this" action="#{notizenBean.neuLadenWennNoetig}"/>
+                    <p:remoteCommand id="neuLadenCmd" name="notizNeuLaden" process="@this" action="#{notizenBean.neuLadenWennNoetig}"/>
                 </h:panelGroup>
             </div>
         </h:form>

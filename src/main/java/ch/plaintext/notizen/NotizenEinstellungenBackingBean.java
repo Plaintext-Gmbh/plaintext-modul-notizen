@@ -75,7 +75,9 @@ public class NotizenEinstellungenBackingBean implements Serializable {
             laden();
             ergebnis = "gespeichert";
             meldung = ablage;
-        } catch (RuntimeException e) {
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            // Erwartete Fehler anzeigen; alles andere (z.B. Schreibschutz der App) dem
+            // JSF-ExceptionHandler überlassen, der zeigt den übersetzten Hinweis der App.
             ergebnis = "fehler";
             meldung = e.getMessage();
         }

@@ -1,6 +1,6 @@
-# Release per Git-Tag X.Y.Z nach GitHub Packages (plaintext-mvn), Karte 2096.
-# Der Tag IST die Version; gepusht hat ihn, wer taggt. Die POM-Version wird nur im
-# Arbeitsbaum gesetzt, nie committet (main bleibt auf X.Y.Z-SNAPSHOT).
+# Release per Git-Tag X.Y.Z nach Reposilite (Karte 2412, vorher GitHub Packages, Karte 2096).
+# Der Tag IST die Version; gepusht hat ihn, wer taggt. Ablauf und Pruefungen: ci/release.sh.
+# Secret, NUR fuer das Ereignis tag (kein PR-Lauf sieht es): maven_nas_token (Server-Id plaintext-nas).
 when:
   - event: tag
 
@@ -8,8 +8,7 @@ steps:
   release:
     image: maven:3.10-eclipse-temurin-25
     environment:
-      # server-id `plaintext` (GitHub Packages, distributionManagement im pom).
-      MVN_DEPLOY_TOKEN:
-        from_secret: mvn_deploy_token
+      MAVEN_NAS_TOKEN:
+        from_secret: maven_nas_token
     commands:
-      - ci/release.sh
+      - bash ci/release.sh

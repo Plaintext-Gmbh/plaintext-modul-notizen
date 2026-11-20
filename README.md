@@ -13,13 +13,14 @@ Offen, MPL-2.0.
 
 ## Einbau in eine Plaintext-App
 
-1. **Abhängigkeit** (Version siehe Releases):
+1. **Abhängigkeit** (ab 1.1.0 in Reposilite `https://maven.plaintext.ch/releases`, root ≥ 3.58.0;
+   1.0.x liegen auf GitHub Packages):
 
    ```xml
    <dependency>
        <groupId>ch.plaintext</groupId>
        <artifactId>plaintext-modul-notizen</artifactId>
-       <version>1.0.0</version>
+       <version>1.1.0</version>
    </dependency>
    ```
 
@@ -40,8 +41,14 @@ Offen, MPL-2.0.
 ## Entwicklung
 
 ```bash
-mvn verify   # braucht Zugang zum Plaintext-Maven-Repo (GitHub Packages, Plaintext-Gmbh/plaintext-mvn)
+mvn verify   # liest root-v2 aus Reposilite (maven.plaintext.ch, nur im LAN), ohne Anmeldung
 ```
 
 Der Parent ist `plaintext-root-parent`; alle root-Teile sind `provided` — die
 Zielanwendung bringt sie mit. Die Modul-Version ist unabhängig von der root-Version.
+
+## Release
+
+Git-Tag `X.Y.Z` pushen: `.woodpecker/release.yml` ruft `ci/release.sh` und legt das Jar in
+Reposilite ab (Secret `maven_nas_token`, nur Ereignis tag). Versionen sind unveränderlich;
+`ci/release.sh --trocken` prüft vorher, ob die Version frei ist.

@@ -12,3 +12,9 @@ steps:
     commands:
       - mvn -B -Dmaven.build.cache.enabled=false clean verify
       - bash -n ci/release.sh
+
+  js-tests:
+    # Karte 2413: Textregeln der Editor-Knöpfe (notizen.js), ohne Abhängigkeiten.
+    image: node:22-alpine
+    commands:
+      - node --test src/test/js/notizen.test.js

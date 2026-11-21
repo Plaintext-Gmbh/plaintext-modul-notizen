@@ -31,8 +31,11 @@
                     <div class="notizen-leiste" role="toolbar" aria-label="#{i18n.t('Formatieren')}">
                         <button type="button" class="notizen-knopf" data-format="fett" title="#{i18n.t('Fett')}"><b>B</b></button>
                         <button type="button" class="notizen-knopf" data-format="kursiv" title="#{i18n.t('Kursiv')}"><i>I</i></button>
-                        <button type="button" class="notizen-knopf" data-format="liste" title="#{i18n.t('Liste')}">&#8226;</button>
-                        <button type="button" class="notizen-knopf" data-format="titel" title="#{i18n.t('Überschrift')}">H</button>
+                        <button type="button" class="notizen-knopf" data-format="punkt" title="#{i18n.t('Punkt')}">&#8226;</button>
+                        <button type="button" class="notizen-knopf" data-format="unterpunkt" title="#{i18n.t('Unterpunkt')}">&#8227;</button>
+                        <button type="button" class="notizen-knopf" data-format="datum" title="#{i18n.t('Datum einfügen')}" aria-label="#{i18n.t('Datum einfügen')}"><span class="pi pi-calendar" aria-hidden="true"></span></button>
+                        <button type="button" class="notizen-knopf" data-format="erledigt" title="#{i18n.t('Markierung erledigt')}">[x]</button>
+                        <button type="button" class="notizen-knopf" data-format="offen" title="#{i18n.t('Markierung offen')}">[.]</button>
                         <h:panelGroup rendered="#{param.fenster ne '1'}">
                             <button type="button" class="notizen-knopf notizen-fenster-knopf" data-fenster="1">
                                 <span class="pi pi-external-link"></span> #{i18n.t('In eigenem Fenster öffnen')}

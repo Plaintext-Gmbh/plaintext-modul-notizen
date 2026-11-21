@@ -28,9 +28,21 @@ Fett;it;Grassetto
 Kursiv;en;Italic
 Kursiv;fr;Italique
 Kursiv;it;Corsivo
-Überschrift;en;Heading
-Überschrift;fr;Titre
-Überschrift;it;Titolo
+Punkt;en;Bullet
+Punkt;fr;Puce
+Punkt;it;Punto elenco
+Unterpunkt;en;Sub-bullet
+Unterpunkt;fr;Sous-puce
+Unterpunkt;it;Sottopunto
+Datum einfügen;en;Insert date
+Datum einfügen;fr;Insérer la date
+Datum einfügen;it;Inserisci data
+Markierung erledigt;en;Mark done [x]
+Markierung erledigt;fr;Marquer fait [x]
+Markierung erledigt;it;Segna fatto [x]
+Markierung offen;en;Mark open [.]
+Markierung offen;fr;Marquer ouvert [.]
+Markierung offen;it;Segna aperto [.]
 In eigenem Fenster öffnen;en;Open in its own window
 In eigenem Fenster öffnen;fr;Ouvrir dans une fenêtre séparée
 In eigenem Fenster öffnen;it;Apri in una finestra separata

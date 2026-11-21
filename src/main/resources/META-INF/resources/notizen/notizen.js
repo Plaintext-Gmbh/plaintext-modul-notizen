@@ -71,6 +71,7 @@
             if (z.trim() === '' || /^\*+$/.test(z) || /^\*+$/.test(folgt || '')) {
                 return [z];
             }
+            // ponytail: Breite in UTF-16-Einheiten; Emoji zählen doppelt. Erst ändern, wenn das stört.
             return [z, new Array(z.length + 1).join('*'), ''];
         }),
         kursiv: umlegen('*', '*'),

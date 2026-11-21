@@ -6,7 +6,8 @@
  * 'unsafe-inline', und es überlebt Teil-Updates von PrimeFaces):
  *  - Autosave: nach jeder Änderung, sobald 800 ms nicht mehr getippt wird (remoteCommand notizSpeichern).
  *  - Mini-Editor (Karte 2413, Regeln Daniel): Fett = Sternzeile darunter, Kursiv, Punkt «- »,
- *    Unterpunkt « - », Datum JJ-MM-TT, Markierungen [x] und [.] am Zeilenanfang.
+ *    Unterpunkt « - », Datum JJ-MM-TT, Markierungen [x] und [.] am Zeilenanfang. Derselbe Knopf auf
+ *    einer Zeile mit dieser Form nimmt sie wieder weg (ausser Datum); Punkt und Unterpunkt wechseln ineinander.
  *    Die Textregeln sind reine Funktionen (REGELN), getestet in src/test/js/notizen.test.js.
  *  - «In eigenem Fenster öffnen»: dieselbe Seite mit ?fenster=1.
  *  - Fokus: hat das andere Fenster inzwischen gespeichert, neu laden (remoteCommand notizNeuLaden).
@@ -51,10 +52,87 @@
         };
     }
 
+    /**
+     * Umschalten (Wunsch Daniel 21.11.2026): Haben schon alle gewählten Zeilen die Form (hat), nimmt
+     * derselbe Knopf sie weg (weg); sonst setzt er sie (an).
+     */
+    function umschalten(hat, weg, an) {
+        return function (w, a, e) {
+            var z = zeilen(w, a, e);
+            var alle = w.substring(z.start, z.ende).split('\n').every(hat);
+            return jeZeile(alle ? weg : an)(w, a, e);
+        };
+    }
+
+    function beginnt(vor) {
+        return function (z) {
+            return z.indexOf(vor) === 0;
+        };
+    }
+
     function markiere(marke) {
-        return jeZeile(function (z) {
+        return umschalten(beginnt(marke), function (z) {
+            return z.substring(marke.length);
+        }, function (z) {
             return marke + z.replace(MARKE, '');
         });
+    }
+
+    var STERNE = /^\*+$/;
+
+    /**
+     * Fett: darunter Sterne so breit wie die Zeile, danach eine Leerzeile. Sind alle gewählten Textzeilen
+     * schon unterstrichen, nimmt der Knopf Sternzeile und folgende Leerzeile wieder weg.
+     */
+    function fett(w, a, e) {
+        var z = zeilen(w, a, e);
+        var vorher = w.substring(0, z.start).split('\n').length - 1;
+        var alle = w.split('\n');
+        var bis = vorher + w.substring(z.start, z.ende).split('\n').length - 1;
+        function text(i) {
+            return alle[i].trim() !== '' && !STERNE.test(alle[i]);
+        }
+        function unterstrichen(i) {
+            return i + 1 < alle.length && STERNE.test(alle[i + 1]);
+        }
+        var weg = true;
+        for (var j = vorher; j <= bis; j++) {
+            if (text(j) && !unterstrichen(j)) {
+                weg = false;
+            }
+        }
+        var neu = [];
+        var i = vorher;
+        for (; i <= bis; i++) {
+            neu.push(alle[i]);
+            if (!text(i)) {
+                continue;
+            }
+            if (weg) {
+                i++;                                        // Sternzeile
+                if (i + 1 < alle.length && alle[i + 1] === '') {
+                    i++;                                    // Leerzeile danach
+                }
+            } else if (!unterstrichen(i)) {
+                // ponytail: Breite in UTF-16-Einheiten; Emoji zählen doppelt. Erst ändern, wenn das stört.
+                neu.push(new Array(alle[i].length + 1).join('*'), '');
+            }
+        }
+        var block = neu.join('\n');
+        var nachher = alle.slice(i).join('\n');
+        var vorn = w.substring(0, z.start);
+        return {text: vorn + block + (i < alle.length ? '\n' + nachher : ''), a: z.start, e: z.start + block.length};
+    }
+
+    /** Kursiv: Sterne um die Auswahl; stehen schon Sterne darum (oder an ihren Enden), kommen sie weg. */
+    function kursiv(w, a, e) {
+        if (a > 0 && w.charAt(a - 1) === '*' && w.charAt(e) === '*') {
+            return {text: w.substring(0, a - 1) + w.substring(a, e) + w.substring(e + 1), a: a - 1, e: e - 1};
+        }
+        if (e - a >= 2 && w.charAt(a) === '*' && w.charAt(e - 1) === '*') {
+            return {text: w.substring(0, a) + w.substring(a + 1, e - 1) + w.substring(e), a: a, e: e - 2};
+        }
+        return umlegen('*', '*')(w, a, e);
     }
 
     function heute(d) {
@@ -65,23 +143,20 @@
     }
 
     var REGELN = {
-        // Darunter Sterne so breit wie die Zeile, danach eine Leerzeile. Leere Zeilen, Sternzeilen und
-        // Zeilen, unter denen schon eine Sternzeile steht, bleiben, wie sie sind.
-        fett: jeZeile(function (z, folgt) {
-            if (z.trim() === '' || /^\*+$/.test(z) || /^\*+$/.test(folgt || '')) {
-                return [z];
-            }
-            // ponytail: Breite in UTF-16-Einheiten; Emoji zählen doppelt. Erst ändern, wenn das stört.
-            return [z, new Array(z.length + 1).join('*'), ''];
-        }),
-        kursiv: umlegen('*', '*'),
-        punkt: jeZeile(function (z) {
-            return z.indexOf('- ') === 0 || z.indexOf(' - ') === 0 ? z : '- ' + z;
-        }),
-        unterpunkt: jeZeile(function (z) {
+        fett: fett,
+        kursiv: kursiv,
+        // Punkt «- » und Unterpunkt « - » wechseln ineinander; derselbe Knopf nochmals nimmt die Form weg.
+        punkt: umschalten(beginnt('- '), function (z) {
+            return z.substring(2);
+        }, function (z) {
             if (z.indexOf(' - ') === 0) {
-                return z;
+                return z.substring(1);
             }
+            return z.indexOf('- ') === 0 ? z : '- ' + z;
+        }),
+        unterpunkt: umschalten(beginnt(' - '), function (z) {
+            return z.substring(3);
+        }, function (z) {
             return z.indexOf('- ') === 0 ? ' ' + z : ' - ' + z;
         }),
         erledigt: markiere('[x] '),

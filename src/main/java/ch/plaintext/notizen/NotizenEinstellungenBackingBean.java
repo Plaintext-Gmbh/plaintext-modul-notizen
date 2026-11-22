@@ -55,11 +55,28 @@ public class NotizenEinstellungenBackingBean implements Serializable {
         meldung = null;
     }
 
+    /** Karte 2470: die Einstellungen sind ein Dialog auf der Notizen-Seite (fuer alle), darum hier ADMIN/ROOT pruefen. */
+    public boolean isDarf() {
+        return security.ifGranted("ADMIN") || security.ifGranted("ROOT");
+    }
+
+    private boolean verweigert() {
+        if (isDarf()) {
+            return false;
+        }
+        ergebnis = "fehler";
+        meldung = "Kein Zugriff";
+        return true;
+    }
+
     public List<String> getAblagen() {
         return speicher.ablagen();
     }
 
     public void pruefen() {
+        if (verweigert()) {
+            return;
+        }
         try {
             meldung = speicher.pruefe(ablage, ordner);
             ergebnis = "geprueft";
@@ -70,6 +87,9 @@ public class NotizenEinstellungenBackingBean implements Serializable {
     }
 
     public void speichern() {
+        if (verweigert()) {
+            return;
+        }
         try {
             speicher.setzeZiel(security.getMandat(), ablage, ordner);
             laden();

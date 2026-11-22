@@ -5,7 +5,10 @@ package ch.plaintext.notizen;
 
 import ch.plaintext.boot.menu.MenuAnnotation;
 
-/** Menü «Notizen» (Karte 2096); darunter {@link NotizenSeiteMenu} und {@link NotizenEinstellungenMenu}. */
+/**
+ * Menü «Notizen» (Karte 2096), seit Karte 2470 ein einziger Eintrag ohne Untermenü; Einstellungen als Dialog auf der
+ * Seite. Unter welchem Obermenü er hängt, stellt ROOT in den Settings ein ({@code plaintext.menu.platzierung.*}).
+ */
 @MenuAnnotation(
         title = "Notizen",
         link = "notizen.html",

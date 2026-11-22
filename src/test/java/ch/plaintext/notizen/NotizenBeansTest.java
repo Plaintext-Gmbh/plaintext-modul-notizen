@@ -60,6 +60,7 @@ class NotizenBeansTest {
         when(speicher.ziel("default")).thenReturn(new NotizSpeicher.Ziel("demo", "notizen"));
         when(speicher.ablagen()).thenReturn(List.of("demo"));
         when(speicher.pruefe("demo", "notizen")).thenReturn("demo");
+        when(security.ifGranted("ADMIN")).thenReturn(true);
         NotizenEinstellungenBackingBean b = new NotizenEinstellungenBackingBean(speicher, security);
         b.laden();
         assertThat(b.getAblage()).isEqualTo("demo");
@@ -76,5 +77,25 @@ class NotizenBeansTest {
         b.pruefen();
         assertThat(b.getErgebnis()).isEqualTo("fehler");
         assertThat(b.getMeldung()).contains("nicht erreichbar");
+    }
+
+    /** Karte 2470: Einstellungs-Dialog liegt auf der Seite fuer alle; ohne ADMIN/ROOT nichts pruefen, nichts speichern. */
+    @Test
+    void einstellungenNurAdminOderRoot() throws IOException {
+        PlaintextSecurity security = mock(PlaintextSecurity.class);
+        when(security.getMandat()).thenReturn("default");
+        when(speicher.ziel("default")).thenReturn(new NotizSpeicher.Ziel("demo", "notizen"));
+        NotizenEinstellungenBackingBean b = new NotizenEinstellungenBackingBean(speicher, security);
+        b.laden();
+        assertThat(b.isDarf()).isFalse();
+        b.speichern();
+        assertThat(b.getErgebnis()).isEqualTo("fehler");
+        b.pruefen();
+        assertThat(b.getErgebnis()).isEqualTo("fehler");
+        org.mockito.Mockito.verify(speicher, org.mockito.Mockito.never()).setzeZiel(anyString(), anyString(), anyString());
+        org.mockito.Mockito.verify(speicher, org.mockito.Mockito.never()).pruefe(anyString(), anyString());
+
+        when(security.ifGranted("ROOT")).thenReturn(true);
+        assertThat(b.isDarf()).isTrue();
     }
 }

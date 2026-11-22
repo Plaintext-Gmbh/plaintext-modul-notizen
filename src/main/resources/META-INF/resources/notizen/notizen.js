@@ -10,6 +10,7 @@
  *    einer Zeile mit dieser Form nimmt sie wieder weg (ausser Datum); Punkt und Unterpunkt wechseln ineinander.
  *    Die Textregeln sind reine Funktionen (REGELN), getestet in src/test/js/notizen.test.js.
  *  - «In eigenem Fenster öffnen»: dieselbe Seite mit ?fenster=1.
+ *  - «Einstellungen» (nur ADMIN/ROOT): Dialog notizenEinstellungen (Karte 2470).
  *  - Fokus: hat das andere Fenster inzwischen gespeichert, neu laden (remoteCommand notizNeuLaden).
  */
 (function () {
@@ -219,13 +220,20 @@
     });
 
     document.addEventListener('click', function (ev) {
-        var k = ev.target && ev.target.closest ? ev.target.closest('[data-format],[data-fenster]') : null;
+        var k = ev.target && ev.target.closest ? ev.target.closest('[data-format],[data-fenster],[data-einstellungen]') : null;
         if (!k || !k.closest('.notizen')) {
             return;
         }
         ev.preventDefault();
         if (k.hasAttribute('data-fenster')) {
             window.open(window.location.pathname + '?fenster=1', 'plaintext-notizen', 'width=760,height=820');
+            return;
+        }
+        if (k.hasAttribute('data-einstellungen')) {
+            // Karte 2470: Einstellungen als Dialog statt eigener Seite/Menuepunkt.
+            if (window.PF && PF('notizenEinstellungen')) {
+                PF('notizenEinstellungen').show();
+            }
             return;
         }
         var t = textfeld();

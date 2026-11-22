@@ -24,7 +24,11 @@
 
                 <h:panelGroup layout="block" styleClass="notizen-hinweis" rendered="#{notizenBean.ohneAblage}">
                     #{i18n.t('Für Notizen ist noch keine Speicher-Ablage eingerichtet.')}
-                    <a href="notizen-einstellungen.html">#{i18n.t('Notizen-Einstellungen')}</a>
+                    <h:panelGroup rendered="#{notizenEinstellungenBean.darf}">
+                        <button type="button" class="notizen-knopf" data-einstellungen="1">
+                            <span class="pi pi-cog"></span> #{i18n.t('Notizen-Einstellungen')}
+                        </button>
+                    </h:panelGroup>
                 </h:panelGroup>
 
                 <h:panelGroup layout="block" rendered="#{not notizenBean.ohneAblage}">
@@ -39,6 +43,12 @@
                         <h:panelGroup rendered="#{param.fenster ne '1'}">
                             <button type="button" class="notizen-knopf notizen-fenster-knopf" data-fenster="1">
                                 <span class="pi pi-external-link"></span> #{i18n.t('In eigenem Fenster öffnen')}
+                            </button>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{param.fenster ne '1' and notizenEinstellungenBean.darf}">
+                            <button type="button" class="notizen-knopf" data-einstellungen="1"
+                                    title="#{i18n.t('Notizen-Einstellungen')}" aria-label="#{i18n.t('Notizen-Einstellungen')}">
+                                <span class="pi pi-cog" aria-hidden="true"></span>
                             </button>
                         </h:panelGroup>
                         <h:panelGroup id="notizStatus" layout="block"
@@ -60,6 +70,46 @@
                 </h:panelGroup>
             </div>
         </h:form>
+
+        <!-- Karte 2470: Einstellungen als Dialog (vorher eigene Seite mit Untermenue), nur ADMIN/ROOT;
+             die Bean prueft die Rolle zusaetzlich serverseitig. -->
+        <p:dialog widgetVar="notizenEinstellungen" header="#{i18n.t('Notizen-Einstellungen')}" modal="true"
+                  rendered="#{param.fenster ne '1' and notizenEinstellungenBean.darf}" resizable="false" width="520">
+            <f:event type="preRenderComponent" listener="#{notizenEinstellungenBean.laden}"/>
+            <h:form id="ef">
+                <input type="hidden" name="_csrf" value="#{_csrf.token}"/>
+                <div class="notizen-einstellungen">
+                    <p>#{i18n.t('Die Notizen liegen in einer Speicher-Ablage von plaintext-root. Ablagen richtet ROOT unter Root – Sidecars ein (Nextcloud, Git oder Lokale Datei).')}</p>
+                    <h:panelGroup layout="block" styleClass="notizen-hinweis" rendered="#{empty notizenEinstellungenBean.ablagen}">
+                        #{i18n.t('Es ist noch keine Speicher-Ablage eingerichtet.')}
+                    </h:panelGroup>
+                    <div class="notizen-formular">
+                        <p:outputLabel for="ablage" value="#{i18n.t('Speicher-Ablage')}"/>
+                        <p:selectOneMenu id="ablage" value="#{notizenEinstellungenBean.ablage}">
+                            <f:selectItem itemLabel="–" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{notizenEinstellungenBean.ablagen}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel for="ordner" value="#{i18n.t('Ordner in der Ablage')}"/>
+                        <p:inputText id="ordner" value="#{notizenEinstellungenBean.ordner}"/>
+                    </div>
+                    <div class="notizen-knoepfe">
+                        <p:commandButton id="pruefen" value="#{i18n.t('Prüfen')}" icon="pi pi-refresh"
+                                         action="#{notizenEinstellungenBean.pruefen}" process="@form" update="@form"/>
+                        <p:commandButton id="speichern" value="#{i18n.t('Speichern')}" icon="pi pi-check"
+                                         action="#{notizenEinstellungenBean.speichern}" process="@form" update="@form"/>
+                    </div>
+                    <h:panelGroup id="ergebnis" layout="block" rendered="#{not empty notizenEinstellungenBean.ergebnis}"
+                                  styleClass="notizen-meldung #{notizenEinstellungenBean.ergebnis eq 'fehler' ? 'notizen-fehler' : 'notizen-ok'}">
+                        <h:outputText rendered="#{notizenEinstellungenBean.ergebnis eq 'geprueft'}"
+                                      value="#{i18n.t('Prüfung erfolgreich, die Ablage ist les- und schreibbar:')} #{notizenEinstellungenBean.meldung}"/>
+                        <h:outputText rendered="#{notizenEinstellungenBean.ergebnis eq 'gespeichert'}"
+                                      value="#{i18n.t('Gespeichert:')} #{notizenEinstellungenBean.meldung}"/>
+                        <h:outputText rendered="#{notizenEinstellungenBean.ergebnis eq 'fehler'}"
+                                      value="#{i18n.t('Fehler:')} #{notizenEinstellungenBean.meldung}"/>
+                    </h:panelGroup>
+                </div>
+            </h:form>
+        </p:dialog>
         <h:outputScript library="notizen" name="notizen.js" target="body"/>
     </ui:define>
 </ui:composition>
